@@ -3,7 +3,7 @@ Upload File Csv Project
 
 ## Getting Started
 
-This service allows users to login upload csv files,.
+This project involves building a web application with a backend implemented using NestJS and a frontend using React. The main functionality of the application includes user authentication with a login function, uploading CSV files, and collecting performance feedback from users regarding the file uploading process.
 
 ### Prerequisites
 
