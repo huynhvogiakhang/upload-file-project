@@ -3,7 +3,7 @@ Upload File Csv Project
 
 ## Getting Started
 
-This project involves building a web application with a backend implemented using NestJS and a frontend using React. The main functionality of the application includes user authentication with a login function, uploading CSV files, and collecting performance feedback from users regarding the file uploading process.
+This project involves building a web application with a backend implemented using NestJS and a frontend using React. The main functionality of the application includes user authentication with a login function, uploading CSV files with required columns: postId,id,name,email,body.Read uploaded data from the pagination user's csv file. Collecting performance feedback from users regarding the file uploading process.
 
 ### Prerequisites
 
