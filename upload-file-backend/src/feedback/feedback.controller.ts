@@ -1,5 +1,10 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { FeedbackService } from './feedback.service';
 import { FeedbackReqDto } from './dto/feedback.dto';
@@ -14,6 +19,7 @@ export class FeedbackController {
 
   @Post()
   @ApiOperation({ summary: 'Add upload file feedback for user' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'Success',

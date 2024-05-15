@@ -14,6 +14,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -22,8 +23,9 @@ import { JwtAuthGuard } from 'src/core/auth/auth.guard';
 
 import { FileService } from './file.service';
 import { UserData } from 'src/entity/user-data.entity';
+import { PaginatedResponse } from './dto/file-pagination.dto';
 
-@ApiTags('file')
+@ApiTags('User File')
 @Controller('file')
 @UseGuards(JwtAuthGuard)
 export class FileController {
@@ -70,6 +72,23 @@ export class FileController {
   }
 
   @Get()
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get uploaded file from user' })
+  @ApiQuery({
+    name: 'page',
+    description: 'Current page of pagination',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'size',
+    description: 'Size value of each page',
+    required: false,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: PaginatedResponse<UserData>,
+  })
   async getUserFile(
     @Query() query: any,
     @Req() request: Request,

@@ -12,7 +12,7 @@ const UploadMenu: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:8081/user/login', { username });
+      const response = await axios.post('http://127.0.0.1:8080/user/login', { username });
       const token = response.data.data.accessToken;
       setAccessToken(token);
     } catch (error) {
@@ -43,7 +43,7 @@ const UploadMenu: React.FC = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8081/file', formData, {
+      const response = await axios.post('http://127.0.0.1:8080/file', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`
@@ -58,7 +58,7 @@ const UploadMenu: React.FC = () => {
 
   const fetchData = async (page: number, size: number) => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8081/file?page=${page}&size=${size}`, {
+            const response = await axios.get(`http://127.0.0.1:8080/file?page=${page}&size=${size}`, {
                 headers: {
                   Authorization: `Bearer ${accessToken}`
                 }
@@ -92,7 +92,7 @@ const UploadMenu: React.FC = () => {
     
       const handleFeedbackSubmit = async () => {
         try {
-          const response = await axios.post('http://127.0.0.1:8081/feedback', { feedBack: feedback }, {
+          const response = await axios.post('http://127.0.0.1:8080/feedback', { feedBack: feedback }, {
             headers: {              
               Authorization: `Bearer ${accessToken}`
             },

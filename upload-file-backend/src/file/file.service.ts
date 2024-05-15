@@ -9,14 +9,7 @@ import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { CsvDTO } from './dto/csv.dto';
 import { Logger } from 'winston';
-
-class PaginatedResponse<T> {
-  userData: T[];
-  totalCount: number;
-  currentPage: number;
-  totalPages: number;
-  size: number;
-}
+import { PaginatedResponse } from './dto/file-pagination.dto';
 
 @Injectable()
 export class FileService {

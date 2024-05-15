@@ -15,6 +15,10 @@ export class UserFeedback {
   @IsString()
   @IsNotEmpty()
   @Column()
+  @ApiProperty({
+    description: 'The feedback of upload file performance',
+    example: 'The upload performance is bad',
+  })
   feedBack: string;
 
   @ManyToOne(() => User, (user) => user.data)
