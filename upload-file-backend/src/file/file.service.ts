@@ -21,7 +21,7 @@ export class FileService {
     private readonly logger: Logger,
   ) {}
 
-  async uploadFile(datas: UserData[], user: any): Promise<UserData> {
+  async uploadFile(datas: any, user: any): Promise<UserData> {
     const userInfo = await this.usersRepository.findOne({
       where: { username: user.username },
     });

@@ -24,7 +24,7 @@ export class UserService {
       this.usersRepository.save(newUser);
     }
     const payload = { username: userInfo.username };
-
-    return { accessToken: this.authService.createToken(payload) };
+    const token = await this.authService.createToken(payload);
+    return { accessToken: token };
   }
 }
