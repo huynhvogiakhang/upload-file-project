@@ -6,10 +6,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { FeedbackService } from './feedback.service';
-import { FeedbackReqDto } from './dto/feedback.dto';
 import { JwtAuthGuard } from 'src/core/auth/auth.guard';
-import { Request } from 'express';
+import { FeedbackReqDto } from './dto/feedback.dto';
+import { FeedbackService } from './feedback.service';
 
 @ApiTags('Feedback')
 @Controller('/feedback')
@@ -32,7 +31,7 @@ export class FeedbackController {
   })
   async createFeedBack(
     @Body() data: FeedbackReqDto,
-    @Req() request: Request,
+    @Req() request: any,
   ): Promise<any> {
     const user = request['user'];
     return this.feedbackService.createFeedBack(data, user);

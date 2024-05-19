@@ -26,9 +26,16 @@ export class FileService {
       where: { username: user.username },
     });
 
-    for (const data of datas) {
-      data.user = userInfo;
-      await this.usersDataRepository.insert(data);
+    try {
+      for (const data of datas) {
+        data.user = userInfo;
+        await this.usersDataRepository.insert(data);
+      }
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new BadRequestException(
+        'Error when insert data to database, Maybe record is duplicated',
+      );
     }
     return;
   }
@@ -65,46 +72,20 @@ export class FileService {
   }
 
   async validateCsvData(file): Promise<any> {
-    const csvContent = file.buffer;
     try {
-      const parsedData: any = await new Promise((resolve, reject) => {
-        csv.parse(
-          csvContent,
-          {
-            columns: true,
-            relax_quotes: true,
-            skip_empty_lines: true,
-            cast: true,
-            bom: true,
-          },
-          (err, records) => {
-            if (err) {
-              reject(err);
-              return { error: true, message: 'Unable to parse file' };
-            }
-            resolve(records);
-          },
-        );
-      });
-      const errors: string[] = [];
+      const parsedData: any = await this.parseCsvData(file);
       if (!parsedData.length) {
-        errors.push('Empty File Provided');
-        return {
-          error: true,
-          message: 'File Validation Failed',
-          errorsArray: errors,
-        };
+        throw new BadRequestException(
+          'File Validation Failed: Empty File Provided',
+        );
       }
 
-      //validate All Rows
       for await (const [index, rowData] of parsedData.entries()) {
         const validationErrors = await this.validateFileRow(rowData);
         if (validationErrors.length) {
-          return {
-            error: true,
-            message: `File Rows Validation Failed at row: ${index + 1}`,
-            errorsArray: validationErrors,
-          };
+          throw new BadRequestException(
+            `File Rows Validation Failed at row: ${index + 1}`,
+          );
         }
       }
       return parsedData;
@@ -112,6 +93,29 @@ export class FileService {
       if (error['message']) this.logger.error(error.message);
       throw new BadRequestException('Error when parse or validate CSV file');
     }
+  }
+
+  async parseCsvData(file): Promise<any> {
+    const csvContent = file.buffer;
+    return new Promise((resolve, reject) => {
+      csv.parse(
+        csvContent,
+        {
+          columns: true,
+          relax_quotes: true,
+          skip_empty_lines: true,
+          cast: true,
+          bom: true,
+        },
+        (err, records) => {
+          if (err) {
+            reject(err);
+            return { error: true, message: 'Unable to parse file' };
+          }
+          resolve(records);
+        },
+      );
+    });
   }
 
   async validateFileRow(rowData) {
